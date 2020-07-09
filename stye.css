@@ -1,0 +1,38 @@
+*{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+.container{
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    grid-template-rows: repeat(4,1fr);
+    row-gap: 10px;
+    column-gap: 10px;
+    min-width: 400px;
+    max-width: 800px;
+    margin: auto;
+}
+.container .group-div{
+    position: relative;
+    border: 1px solid #333;
+}
+.group-div .front-img{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #333;
+    z-index: 1;
+    transition: all 1s ease-in-out;
+}.front-img.hide{
+    transform: scale(0);
+}
+.group-div .back-img,
+.group-div .front-img {
+    backface-visibility: hidden;
+}
+.group-div .back-img  img{
+    width: 100%;
+}
