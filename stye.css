@@ -3,36 +3,100 @@
     margin: 0;
     padding: 0;
 }
-.container{
-    display: grid;
-    grid-template-columns: repeat(3,1fr);
-    grid-template-rows: repeat(4,1fr);
-    row-gap: 10px;
-    column-gap: 10px;
-    min-width: 400px;
-    max-width: 800px;
-    margin: auto;
-}
-.container .group-div{
+body{
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    min-height: 100vh;
     position: relative;
-    border: 1px solid #333;
 }
-.group-div .front-img{
-    position: absolute;
-    top: 0;
+.start{
+    position: fixed;
     left: 0;
-    width: 100%;
+    top: 0;
     height: 100%;
-    background-color: #333;
-    z-index: 1;
-    transition: all 1s ease-in-out;
-}.front-img.hide{
-    transform: scale(0);
+    width: 100%;
+    background-color: rgba(51, 182, 196, 0.7);;
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
-.group-div .back-img,
-.group-div .front-img {
+.start button{
+    padding: 10px;
+    width: 200px;
+    cursor: pointer;
+    border-radius: 3px;
+    outline: none;
+    border: none;
+    background-color: #B74949;
+    color: #FFF;
+    font-weight: bold;
+    font-size: 20px;
+}
+.statistic{
+    overflow: hidden;
+    background-color: #CCC;
+    width: 640px;
+    margin: 10px auto;
+    border-radius: 3px;
+    border: 1px solid #ACA;
+    padding: 10px;
+}
+.statistic div{
+    width: 50%;
+    float: left;
+}
+.statistic > div:last-of-type{
+    text-align: right;
+}
+.memory-container{
+    width: 640px;
+    margin: 30px auto;
+    display: flex;
+    flex-wrap: wrap;
+    perspective: 500px;
+}
+.group{
+    margin: 5px;
+    height: 150px;
+    width: 150px;
+    position: relative; 
+    transform-style: preserve-3d;
+    transition: transform 1s;
+    cursor: pointer;
+    border: 3px solid #ACA;
+    border-radius: 5px;
+    -moz-backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
 }
-.group-div .back-img  img{
+.group.flipped{
+    transform: rotateY(180deg);
+}
+.back{
+    position: absolute;
+    height: 100%;
     width: 100%;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    transform: rotateY(180deg);
+}
+.back img{
+    height: 100%;
+    width: 100%;
+}
+.front{
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background-color: #333;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    line-height: 150px;
+    text-align: center;
+    color: #fff;
+    font-size: 100px;
+    font-weight: bold;
+}
+.front::after{
+    content: '!';
 }

@@ -1,102 +1,94 @@
-var // variables declaration
-    container  = document.querySelector(".container"),
-    images = [
-    "bootstrap.png",
-    "html5.png",
-    "js.png",
-    "mysql.png",
-    "php.png",
-    "vuejs.png",
-    "bootstrap.png",
-    "html5.png",
-    "js.png",
-    "mysql.png",
-    "php.png",
-    "vuejs.png"
-    ],
-    i,
-    div,
-    div2,
-    MainDiv,
-    img,
-    start = true,
-    selected = [],
-    cpt = 0;
+if(localStorage.getItem('name') !== null){
+    document.getElementById('name').textContent = localStorage.getItem('name');
+    document.querySelector('.start').remove();
+}
+else{
+    document.getElementById('start').onclick = function(){
+        var name = prompt('Enter Your Name');
+        if( name== null || name.trim() == ""){
+            name = "Player";
+        }
+        document.getElementById('name').textContent = name;
+        localStorage.setItem('name',name);
+        document.querySelector('.start').remove();
+    };
+}
 
-// functions implementation
-function createGame(images){
-    for(i = 0;i<images.length;i++){
-        //div that group the subdivs
-        MainDiv = document.createElement("div");
-        MainDiv.classList.add('group-div');
-        // div that contains the image
-       div = document.createElement("div");
-       div.classList.add('back-img');
-        //the image
-        img = document.createElement("img");
-        img.setAttribute('src','./images/' + images[i]);
-        //apend the image to div
-        div.appendChild(img);
-       // div that user will see
-       div2 = document.createElement("div");
-       div2.classList.add('front-img');
-       div2.setAttribute('data-name',img.getAttribute('src').replace(".png","").replace("./images/",""));
-       //firing an event
-       div2.onclick = function(e){
-           if(start == true){
-             selected.push(this.getAttribute('data-name'));
-             this.classList.add('hide');
-             this.style.pointerEvents = "none";
-             start = false
-           }else{
-               if(selected.indexOf(this.getAttribute('data-name'))> -1){
-                   this.classList.add('hide');
-                   this.style.pointerEvents = "none";
-                   cpt = 0;
-                   start = true;
-               }else{
-                    cpt++;
-                    this.classList.add('hide');
-                    var x = this.classList;
-                    setTimeout(function(){
-                      x.remove('hide');      
-                    },1000);
-                    if(cpt === 3){
-                        alert("you have lost");
-                        window.location.reload();
-                        selected = [];
-                        start = true;
-                        cpt = 0 ;
-                    }
-               }
-          }
-       }
-       //appending the divs to the maindiv
-       MainDiv.appendChild(div);
-       MainDiv.appendChild(div2);
-       //appending the main div to the container
-       container.appendChild(MainDiv);
+/* START GAME*/
+
+var cards = document.querySelectorAll('.memory-container > .group');
+var tries = document.getElementById('tries');
+var selectedCards = [],next = true,count = 0;
+var cardOrders = shuffle(cards.length);
+var cardToken = [];
+var j = 0;
+
+for(card of cards){
+    card.style.order = cardOrders[j];
+    card.onclick = function(){
+        var tech = this.getAttribute('data-tech');
+        var item = this;
+        if(next){
+            this.classList.add('flipped');
+            cardToken.push(this);
+            selectedCards.push(tech);
+            console.log(cardToken);
+            console.log(selectedCards);
+            next = false;
+        }else{
+            next = true;
+            if(selectedCards.indexOf(tech) > -1){
+                this.classList.add('flipped');
+                cardToken.push(this);
+                pointer(cardToken,true);
+            }else{
+                this.classList.add('flipped');
+                pointer(cards,true);
+                setTimeout(function(){
+                    item.classList.remove('flipped');
+                    handleClass(selectedCards[0]);
+                    pointer(cards,false);
+                },700);
+                count ++;
+            }
+            cardToken.length = 0;
+            setTimeout(function(){
+                selectedCards.length = 0;
+            },700);
+        }
+        tries.textContent = count;
+    };
+    j++;
+}
+function handleClass(it){
+
+    for(c of cards){
+        if(c.getAttribute('data-tech') == it){
+            c.classList.remove('flipped');
+        }
     }
 }
-  // shuffle the images again
-function shuffle(){
-  var 
-      i,
-      indexed = [],
-      newImage = [],
-      stop = false;
-    while(!stop){
-         i = Math.floor(Math.random()*12) ;
-         if(indexed.indexOf(i) === -1){
-            indexed.push(i);
-            newImage.push(images[i]);  
-         }
-         if(indexed.length === 12){
-             stop = true;
-         }
+function shuffle(length){
+    var cpt = 0;
+    var arr = [];
+    var rdm ;
+    while(cpt < length){
+        rdm = Math.floor(Math.random()*length);
+        if(arr.indexOf(rdm) === -1){
+            arr.push(rdm);
+            cpt++;
+        }
     }
-    return newImage;  
+    return arr;
 }
-// create the game
-images = shuffle();
-createGame(images);
+function pointer(arr,bool){
+    if(bool === true){
+        for(el of arr){
+            el.style.pointerEvents = 'none';
+        }
+    }else{
+        for(el of arr){
+            el.style.pointerEvents = 'all';
+        }
+    }
+}
