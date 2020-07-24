@@ -16,58 +16,47 @@ else{
 
 /* START GAME*/
 
-var cards = document.querySelectorAll('.memory-container > .group');
-var tries = document.getElementById('tries');
-var selectedCards = [],next = true,count = 0;
-var cardOrders = shuffle(cards.length);
-var cardToken = [];
-var j = 0;
+var cards = document.querySelectorAll('.memory-container > .group'), tries = document.getElementById('tries'), selectedCards = [], matchedCards = [],cardOrders = shuffle(cards.length), j = 0;
+
+for(kard of cards){
+  kard.classList.add('flipped');
+  pointerEvent(cards,true);
+}
+
+setTimeout(function(){
+  for(kard of cards){
+    kard.classList.remove('flipped');
+    pointerEvent(cards,false);
+  }
+},1000);
 
 for(card of cards){
     card.style.order = cardOrders[j];
     card.onclick = function(){
-        var tech = this.getAttribute('data-tech');
-        var item = this;
-        if(next){
-            this.classList.add('flipped');
-            cardToken.push(this);
-            selectedCards.push(tech);
-            console.log(cardToken);
-            console.log(selectedCards);
-            next = false;
-        }else{
-            next = true;
-            if(selectedCards.indexOf(tech) > -1){
-                this.classList.add('flipped');
-                cardToken.push(this);
-                pointer(cardToken,true);
+      this.classList.add('flipped');
+      selectedCards.push(this);
+      //we have  two flipped Card
+      if(selectedCards.length === 2){
+            pointerEvent(cards,true);
+            if(selectedCards[0].getAttribute('data-tech') === selectedCards[1].getAttribute('data-tech') ){
+              matchedCards.push(selectedCards[0]);
+              matchedCards.push(selectedCards[1]);
             }else{
-                this.classList.add('flipped');
-                pointer(cards,true);
-                setTimeout(function(){
-                    item.classList.remove('flipped');
-                    handleClass(selectedCards[0]);
-                    pointer(cards,false);
-                },700);
-                count ++;
+              setTimeout(function(){
+                selectedCards[0].classList.remove('flipped');
+                selectedCards[1].classList.remove('flipped');
+              },700);
             }
-            cardToken.length = 0;
             setTimeout(function(){
+                pointerEvent(cards,false);
+                pointerEvent(matchedCards,true);
                 selectedCards.length = 0;
             },700);
-        }
-        tries.textContent = count;
+      }
     };
     j++;
 }
-function handleClass(it){
 
-    for(c of cards){
-        if(c.getAttribute('data-tech') == it){
-            c.classList.remove('flipped');
-        }
-    }
-}
 function shuffle(length){
     var cpt = 0;
     var arr = [];
@@ -81,7 +70,7 @@ function shuffle(length){
     }
     return arr;
 }
-function pointer(arr,bool){
+function pointerEvent(arr,bool){
     if(bool === true){
         for(el of arr){
             el.style.pointerEvents = 'none';

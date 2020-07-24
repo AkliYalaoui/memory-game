@@ -59,7 +59,7 @@ body{
     margin: 5px;
     height: 150px;
     width: 150px;
-    position: relative; 
+    position: relative;
     transform-style: preserve-3d;
     transition: transform 1s;
     cursor: pointer;
