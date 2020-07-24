@@ -8,7 +8,8 @@ body{
     min-height: 100vh;
     position: relative;
 }
-.start{
+.start,
+.game-finished{
     position: fixed;
     left: 0;
     top: 0;
@@ -20,7 +21,8 @@ body{
     justify-content: center;
     align-items: center;
 }
-.start button{
+.start button,
+.game-finished button{
     padding: 10px;
     width: 200px;
     cursor: pointer;
